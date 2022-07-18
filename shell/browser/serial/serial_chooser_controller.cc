@@ -82,9 +82,6 @@ SerialChooserController::SerialChooserController(
 
 SerialChooserController::~SerialChooserController() {
   RunCallback(/*port=*/nullptr);
-  if (chooser_context_) {
-    chooser_context_->RemovePortObserver(this);
-  }
 }
 
 api::Session* SerialChooserController::GetSession() {
@@ -118,7 +115,7 @@ void SerialChooserController::OnPortRemoved(
 }
 
 void SerialChooserController::OnPortManagerConnectionError() {
-  // TODO(nornagon/jkleinsc): report event
+  observation_.Reset();
 }
 
 void SerialChooserController::OnDeviceChosen(const std::string& port_id) {

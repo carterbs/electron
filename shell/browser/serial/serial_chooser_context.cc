@@ -90,7 +90,10 @@ base::Value PortInfoToValue(const device::mojom::SerialPortInfo& port) {
 SerialChooserContext::SerialChooserContext(ElectronBrowserContext* context)
     : browser_context_(context) {}
 
-SerialChooserContext::~SerialChooserContext() = default;
+SerialChooserContext::~SerialChooserContext() {
+  for (auto& observer : port_observer_list_)
+    port_observer_list_.RemoveObserver(&observer);
+}
 
 void SerialChooserContext::OnPermissionRevoked(const url::Origin& origin) {
   for (auto& observer : port_observer_list_)
